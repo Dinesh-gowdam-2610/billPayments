@@ -5,26 +5,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Input Fields from Array</title>
     <style>
+      div {
+        /* display: flex; */
+        /* flex-grow: 1; */
+        align-items: center;
+        align-content: space-between;
+        flex-direction: row;
+        margin-bottom: 1px;
+      }
+
       body {
         font-family: Arial, sans-serif;
         background-color: #f4f4f4; /* Light gray background */
+        margin: 0;
+        padding: 0;
       }
 
-      #inputFields {
+      .container {
+        max-width: auto;
+        margin: auto;
         padding: 10px;
-        background-color: #fff; /* White background for input fields */
+        background-color: #dedede;
         border-radius: 5px;
-        margin-bottom: 20px;
+        overflow: hidden;
+        padding-top: 20px;
+        padding-bottom: 10px;
+      }
+
+      .input-group {
+        display: flex;
+        margin-bottom: 10px;
+      }
+
+      label {
+        flex: 1; /* Equal flex basis for both fields */
+        margin-right: 10px;
+      }
+
+      input[type="text"] {
+        /* display: block; */
+        /* flex-grow: 1; */
+        /* flex-direction: row-reverse; */
+        width: 50px;
+        border: 1px solid #000;
+        padding: 5px;
+        /* margin-left: 10px; */
+        margin-right: 50px;
       }
 
       button {
-        padding: 10px 20px;
+        width: 100%;
+        padding: 10px;
         background-color: #4caf50; /* Green */
         border: none;
         color: white;
         border-radius: 5px;
         cursor: pointer;
         transition: background-color 0.3s;
+        box-sizing: border-box;
+        margin-bottom: 10px;
       }
 
       button:hover {
@@ -74,6 +113,17 @@
       .total {
         font-weight: bold;
       }
+
+      @media screen and (max-width: 500px) {
+        .input-group {
+          flex-direction: row;
+        }
+
+        label {
+          margin-right: 0;
+          margin-bottom: 5px;
+        }
+      }
     </style>
   </head>
 
@@ -81,22 +131,24 @@
     <h2>Input Fields from Array</h2>
 
     <div id="inputFields"></div>
-    <button onclick="addField()">Add Field</button>
-    <button onclick="removeField()" id="removeBtn" style="display: none">
-      Remove Field
-    </button>
-    <button onclick="calculate()" id="calculateBtn" style="display: none">
-      Calculate
-    </button>
-    <div class="loader" id="loader" style="display: none"></div>
+    <div class="container">
+      <button onclick="addField()">Add Field</button>
+      <button onclick="removeField()" id="removeBtn" style="display: none">
+        Remove Field
+      </button>
+      <button onclick="calculate()" id="calculateBtn" style="display: none">
+        Calculate
+      </button>
+      <div class="loader" id="loader" style="display: none"></div>
+    </div>
     <!-- Loader hidden by default -->
 
     <div id="results"></div>
     <div id="total"></div>
 
     <script>
-      let a = [];
-      let b = [];
+      let a = [2];
+      let b = [2];
 
       // Function to create input fields
       function createInputFields(arr1, arr2, containerId) {
@@ -109,7 +161,8 @@
           inputA.type = "text";
           inputA.value = value;
           inputA.oninput = function () {
-            a[index] = this.value;
+            a[index] = parseFloat(this.value);
+            calculate(); // Auto-calculate when input changes
           }; // Update corresponding value in array 'a'
           container.appendChild(labelA);
           container.appendChild(inputA);
@@ -118,9 +171,10 @@
           labelB.textContent = `Field ${index + 1} (B): `;
           const inputB = document.createElement("input");
           inputB.type = "text";
-          inputB.value = arr2[index] || 0;
+          inputB.value = arr2[index];
           inputB.oninput = function () {
-            b[index] = this.value;
+            b[index] = parseFloat(this.value);
+            calculate(); // Auto-calculate when input changes
           }; // Update corresponding value in array 'b'
           container.appendChild(labelB);
           container.appendChild(inputB);
@@ -129,11 +183,11 @@
         });
 
         if (arr1.length >= 1) {
-          document.getElementById("calculateBtn").style.display =
-            "inline-block"; // Show calculate button if at least one field is added
+          //   document.getElementById("calculateBtn").style.display =
+          // "inline-block"; // Show calculate button if at least one field is added
           document.getElementById("removeBtn").style.display = "inline-block"; // Show remove button if at least one field is added
         } else {
-          document.getElementById("calculateBtn").style.display = "none"; // Hide calculate button if no fields are added
+          //   document.getElementById("calculateBtn").style.display = "none"; // Hide calculate button if no fields are added
           document.getElementById("removeBtn").style.display = "none"; // Hide remove button if no fields are added
         }
       }
