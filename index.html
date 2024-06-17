@@ -3,11 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Input Fields from Array</title>
+    <title>Calculate the amount</title>
     <style>
       div {
-        /* display: flex; */
-        /* flex-grow: 1; */
         align-items: center;
         align-content: space-between;
         flex-direction: row;
@@ -16,7 +14,7 @@
 
       body {
         font-family: Arial, sans-serif;
-        background-color: #f4f4f4; /* Light gray background */
+        background-color: #f4f4f4;
         margin: 0;
         padding: 0;
       }
@@ -38,25 +36,22 @@
       }
 
       label {
-        flex: 1; /* Equal flex basis for both fields */
+        flex: 1;
         margin-right: 10px;
+        white-space: nowrap; /* Prevent label text from wrapping */
       }
 
-      input[type="text"] {
-        /* display: block; */
-        /* flex-grow: 1; */
-        /* flex-direction: row-reverse; */
+      input[type="number"] {
         width: 50px;
         border: 1px solid #000;
         padding: 5px;
-        /* margin-left: 10px; */
-        margin-right: 50px;
+        margin-right: 10px;
       }
 
       button {
         width: 100%;
         padding: 10px;
-        background-color: #4caf50; /* Green */
+        background-color: #4caf50;
         border: none;
         color: white;
         border-radius: 5px;
@@ -67,7 +62,7 @@
       }
 
       button:hover {
-        background-color: #45a049; /* Darker green on hover */
+        background-color: #45a049;
       }
 
       #results {
@@ -75,13 +70,13 @@
       }
 
       .loader {
-        border: 4px solid #f3f3f3; /* Light gray border */
-        border-top: 4px solid #3498db; /* Blue for top border */
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #3498db;
         border-radius: 50%;
         width: 30px;
         height: 30px;
-        animation: spin 1s linear infinite; /* Spin animation */
-        margin: auto; /* Center loader */
+        animation: spin 1s linear infinite;
+        margin: auto;
         margin-bottom: 20px;
       }
 
@@ -141,53 +136,52 @@
       </button>
       <div class="loader" id="loader" style="display: none"></div>
     </div>
-    <!-- Loader hidden by default -->
 
     <div id="results"></div>
     <div id="total"></div>
 
     <script>
-      let a = [];
-      let b = [];
+      let a = []; // Initialize a with default values
+      let b = [1]; // Initialize b with default values of 1
 
       // Function to create input fields
       function createInputFields(arr1, arr2, containerId) {
         const container = document.getElementById(containerId);
         container.innerHTML = ""; // Clear existing fields
         arr1.forEach((value, index) => {
+          const inputGroup = document.createElement("div");
+          inputGroup.className = "input-group";
+
           const labelA = document.createElement("label");
           labelA.textContent = `Field ${index + 1} (A): `;
           const inputA = document.createElement("input");
-          inputA.type = "text";
+          inputA.type = "number"; // Changed to "number"
           inputA.value = value;
           inputA.oninput = function () {
             a[index] = parseFloat(this.value);
             calculate(); // Auto-calculate when input changes
-          }; // Update corresponding value in array 'a'
-          container.appendChild(labelA);
-          container.appendChild(inputA);
+          };
+          inputGroup.appendChild(labelA);
+          inputGroup.appendChild(inputA);
 
           const labelB = document.createElement("label");
           labelB.textContent = `Field ${index + 1} (B): `;
           const inputB = document.createElement("input");
-          inputB.type = "text";
+          inputB.type = "number"; // Changed to "number"
           inputB.value = arr2[index];
           inputB.oninput = function () {
             b[index] = parseFloat(this.value);
             calculate(); // Auto-calculate when input changes
-          }; // Update corresponding value in array 'b'
-          container.appendChild(labelB);
-          container.appendChild(inputB);
+          };
+          inputGroup.appendChild(labelB);
+          inputGroup.appendChild(inputB);
 
-          container.appendChild(document.createElement("br"));
+          container.appendChild(inputGroup);
         });
 
         if (arr1.length >= 1) {
-          //   document.getElementById("calculateBtn").style.display =
-          // "inline-block"; // Show calculate button if at least one field is added
           document.getElementById("removeBtn").style.display = "inline-block"; // Show remove button if at least one field is added
         } else {
-          //   document.getElementById("calculateBtn").style.display = "none"; // Hide calculate button if no fields are added
           document.getElementById("removeBtn").style.display = "none"; // Hide remove button if no fields are added
         }
       }
@@ -195,7 +189,7 @@
       // Function to add a field
       function addField() {
         const newFieldValueA = ""; // Default value for new field A
-        const newFieldValueB = ""; // Default value for new field B
+        const newFieldValueB = 1; // Default value for new field B
         a.push(newFieldValueA); // Push default value to array a
         b.push(newFieldValueB); // Push default value to array b
         createInputFields(a, b, "inputFields");
